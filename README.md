@@ -69,7 +69,7 @@ A festive Arduino project that transforms Christmas fairy lights into a Morse co
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd XmasLed
+cd XmasMorseLed
 
 # Configure your message and settings in src/main.cpp
 # MESSAGE: Text to transmit in Morse code
