@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780">
+<title>XmasMorseLed 2.0 circuit schematic</title><desc>USB powered ESP32-C6 SuperMini controlling an BC337 low-side tree LED switch; independent always-on star LED.</desc>
+<rect width="1200" height="780" fill="#fff"/>
+<style>text{font:17px sans-serif;fill:#172c36}.title{font-size:28px;font-weight:bold}.small{font-size:14px}.wire{fill:none;stroke:#334b56;stroke-width:3}.power{stroke:#b62e32}.ground{stroke:#246895}.part{fill:#f6f8fa;stroke:#334b56;stroke-width:2}.dot{fill:#334b56}</style>
+<text x="40" y="45" class="title">XmasMorseLed 2.0 • Reference schematic</text><text x="40" y="74">USB 5 V / 1 A • GPIO0 active HIGH • Physical validation pending</text>
+<rect x="60" y="220" width="240" height="280" rx="8" class="part"/><text x="85" y="255">U1  ESP32-C6</text><text x="85" y="282">SuperMini</text><text x="85" y="322">USB-C input</text><text x="85" y="348">5 V supply</text><text x="246" y="310">5V</text><text x="224" y="410">GPIO0</text><text x="245" y="480">GND</text>
+<path d="M300 304H340V130H1080M300 474H340V650H1110" class="wire"/>
+<text x="355" y="120">USB_5V (verify header output)</text><text x="350" y="680">Common GND</text>
+<path d="M300 404H400M460 404H590V440H730" class="wire"/>
+<rect x="400" y="390" width="60" height="28" class="part"/><text x="393" y="368">R1 470 Ω</text><text x="310" y="435" class="small">MORSE</text><text x="602" y="426" class="small">BASE</text>
+<path d="M590 440V510M590 570V650" class="wire"/><rect x="577" y="510" width="26" height="60" class="part"/><text x="465" y="540">R2 100 kΩ</text><circle cx="590" cy="440" r="5" class="dot"/>
+<rect x="730" y="370" width="165" height="140" rx="6" class="part"/><text x="752" y="402">Q1 BC337</text><text x="740" y="446">B (2)</text><text x="842" y="390">C (1)</text><text x="842" y="497">E (3)</text><text x="740" y="470" class="small">NPN / TO-92</text>
+<path d="M865 510V650M865 370V330" class="wire"/>
+<path d="M865 130V166M865 222V252" class="wire power"/><rect x="852" y="166" width="26" height="56" class="part"/><text x="725" y="188">R3 56 Ω</text><text x="725" y="210" class="small">1/2 W</text>
+<rect x="801" y="252" width="128" height="78" class="part"/><text x="815" y="275">J1 + / −</text><text x="815" y="298">Tree LEDs</text><text x="815" y="318" class="small">~3 V / 50 mA</text>
+<path d="M1080 130V166M1080 222V252M1080 330V650" class="wire power"/><rect x="1067" y="166" width="26" height="56" class="part"/><text x="950" y="188">R4 220 Ω</text><text x="950" y="210" class="small">1/4 W</text>
+<rect x="1016" y="252" width="128" height="78" class="part"/><text x="1030" y="275">J2 + / −</text><text x="1030" y="298">White star</text><text x="1030" y="318" class="small">Always on</text>
+<path d="M440 130V240M420 240H460M420 252H460M440 252V310H505V650M540 130V240M520 240H560M520 252H560M540 252V310H505" class="wire"/>
+<text x="370" y="210" class="small">C1 100 nF</text><text x="520" y="210" class="small">C2 47 µF</text><text x="556" y="236">+</text><text x="558" y="275" class="small">≥10 V</text>
+<circle cx="865" cy="130" r="5" class="dot"/><circle cx="1080" cy="130" r="5" class="dot"/><circle cx="590" cy="650" r="5" class="dot"/><circle cx="865" cy="650" r="5" class="dot"/>
+<text x="40" y="720">Confirm the BC337 manufacturer pinout before soldering. Never connect the LED load directly to GPIO0.</text><text x="40" y="750" class="small">See hardware/README.md for BOM, netlist, power checks and LED-rating assumptions. Drawing is not to physical scale.</text>
+</svg>
