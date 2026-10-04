@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#244e42">
+<link rel="icon" href="data:,">
+<title>XmasMorseLed · Sua mensagem em luz</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#243a33;background:#f3f4ef;font-synthesis:none;color-scheme:light;--green:#244e42;--muted:#65736b;--line:#dce3db;--red:#ad382e}
+*{box-sizing:border-box}body{margin:0}button,input,textarea{font:inherit}button,input,textarea,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{cursor:wait}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #bc791c;outline-offset:4px}[hidden]{display:none!important}.shell{max-width:1000px;margin:auto;padding:32px 32px 24px}header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:27px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:750;letter-spacing:-.4px}.brand svg{width:36px;height:42px}.version{font-size:12px;letter-spacing:1.4px;border:1px solid #bccac0;border-radius:6px;padding:5px 9px;font-weight:650}.intro{padding:34px 0 25px}.eyebrow{font-size:11px;letter-spacing:2px;font-weight:750;color:#647267;margin:0 0 10px}h1{font-size:32px;letter-spacing:-1.3px;margin:0 0 10px;font-weight:720}.intro p:last-child{margin:0;color:var(--muted);line-height:1.6;font-size:15px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:26px;align-items:start}.editor{background:#fff;border:1px solid var(--line);border-radius:14px;padding:27px}fieldset{border:0;padding:0;margin:0;min-width:0}legend{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.label-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}label,.label{font-weight:650;font-size:15px}.counter{font-size:12px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}textarea{display:block;width:100%;resize:vertical;min-height:118px;max-height:320px;border:1px solid #aabcb0;border-radius:8px;background:#fcfdfb;color:#243a33;padding:15px;font-size:19px;line-height:1.5;letter-spacing:.6px}textarea[aria-invalid=true],input[aria-invalid=true]{border-color:var(--red)}.hint{font-size:12px;line-height:1.6;color:var(--muted);margin:10px 0 0}.punctuation{display:block;word-spacing:3px;margin-top:3px;font-family:ui-monospace,monospace;color:#526357}.field-error{font-size:13px;line-height:1.5;color:var(--red);margin:7px 0 0}.speed{border-top:1px solid #e8ece5;padding-top:24px;margin-top:26px}.speed-head{display:flex;align-items:center;justify-content:space-between;gap:16px}.number{display:flex;align-items:center;gap:7px}.number input{width:65px;height:43px;border:1px solid #b8c7bc;border-radius:7px;text-align:center;color:var(--green);background:#fff;font-weight:650}.unit{font-size:12px;color:var(--muted)}input[type=range]{display:block;width:100%;margin:22px 0 4px;accent-color:var(--green);height:25px;cursor:pointer}.scale{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}.actions{margin-top:29px;display:flex;align-items:center;gap:17px}.save{border:0;background:var(--green);color:#fff;border-radius:8px;min-height:48px;min-width:137px;padding:12px 22px;font-size:14px;font-weight:650;transition:background .15s}.save:hover:not(:disabled){background:#193e33}.save:disabled{background:#6b8378}.actions .hint{margin:0;max-width:220px}.notice{margin:18px 0 0;font-size:13px;line-height:1.6;padding:12px 14px;border-radius:7px;background:#edf4ed;color:#234b39;overflow-wrap:anywhere}.notice[data-kind=error]{background:#fbefec;color:#922e26}.notice[data-kind=loading]{background:#f0f2ee;color:#56655b}.retry{margin-top:10px;background:white;color:var(--green);border:1px solid #aabcb0;border-radius:6px;padding:9px 14px;font-size:13px;min-height:40px}.status-panel{background:var(--green);border-radius:14px;color:#f5f7f2;padding:24px}.status-top{display:flex;gap:8px;align-items:center;font-size:12px;margin-bottom:26px;color:#e2ece1}.dot{width:7px;height:7px;background:#b2c5b3;border-radius:50%;flex:none}.dot[data-state=online]{background:#bcde89}.dot[data-state=offline]{background:#ffbf80}.status-panel .eyebrow{color:#bdcfc1;font-size:10px;letter-spacing:1.6px}.current-message{font-size:20px;line-height:1.55;letter-spacing:.5px;margin:8px 0 25px;overflow-wrap:anywhere;min-height:62px}.current-speed{padding-top:19px;border-top:1px solid #507164;font-size:12px;color:#c9d9cb}.current-speed strong{font-size:27px;font-weight:550;color:white;margin-right:5px}.connection-note{padding:20px 3px;color:var(--muted);font-size:12px;line-height:1.7}.connection-note strong{display:block;color:#465d4f;font-weight:650;margin-bottom:5px}footer{margin-top:30px;border-top:1px solid var(--line);padding-top:18px;display:flex;justify-content:space-between;gap:15px;font-size:11px;color:#738075}.morse-mark{letter-spacing:2px;color:#9a6b2f;white-space:nowrap}noscript{display:block;padding:20px;color:var(--red)}
+@media(max-width:720px){.shell{padding:22px 20px}.intro{padding:28px 0 22px}h1{font-size:29px}.layout{grid-template-columns:1fr;gap:20px}.editor{padding:22px}.status-panel{padding:20px}.status-top{margin-bottom:17px}.current-message{min-height:0;margin-bottom:18px}.connection-note{padding:16px 3px 0}.actions{gap:13px}.actions .hint{font-size:11px}.brand{font-size:17px}footer{margin-top:24px}}@media(max-width:360px){.shell{padding:18px 14px}.editor{padding:18px}.actions{align-items:flex-start;flex-direction:column}.speed-head{gap:8px}.brand{gap:8px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header><div class="brand"><svg viewBox="0 0 36 42" aria-hidden="true"><path d="M18 6 7 20h6L4 32h28L23 20h6Z" fill="#244e42"/><path d="M16 32h4v8h-4z" fill="#987047"/><circle cx="18" cy="4" r="3" fill="#c49440"/><circle cx="16" cy="19" r="2" fill="#f1d49b"/><circle cx="22" cy="27" r="2" fill="#f1d49b"/></svg><span>XmasMorseLed</span></div><span class="version">2.0</span></header>
+<main>
+<div class="intro"><p class="eyebrow">MENSAGENS DE NATAL · CÓDIGO MORSE</p><h1>Sua mensagem, em luz.</h1><p>Escolha as palavras e o ritmo das luzes da sua árvore.</p></div>
+<div class="layout">
+<section class="editor" aria-label="Configurar transmissão">
+<form id="config-form" novalidate>
+<fieldset id="fields" disabled><legend>Mensagem e velocidade</legend>
+<div class="label-row"><label for="message">Mensagem</label><span id="counter" class="counter">0 / 120</span></div>
+<textarea id="message" name="message" maxlength="120" rows="3" spellcheck="false" autocapitalize="characters" aria-describedby="message-hint message-error" placeholder="Ex.: FELIZ NATAL!"></textarea>
+<p class="hint" id="message-hint">Use letras sem acento, números e espaços.<span class="punctuation">Pontuação: . , ? ! - / ( ) : ; = + @</span></p>
+<p id="message-error" class="field-error" hidden></p>
+<div class="speed"><div class="speed-head"><label for="wpm">Velocidade</label><div class="number"><input id="wpm" name="wpm" type="number" inputmode="numeric" min="5" max="40" step="1" value="25" aria-describedby="speed-hint wpm-error"><span class="unit">PPM</span></div></div>
+<input id="speed-range" type="range" min="5" max="40" step="1" value="25" aria-label="Ajustar velocidade" aria-describedby="speed-hint">
+<div class="scale"><span>5 · Mais lento</span><span>Mais rápido · 40</span></div><p class="hint" id="speed-hint">Palavras por minuto na transmissão Morse.</p><p id="wpm-error" class="field-error" hidden></p></div>
+<div class="actions"><button id="save" class="save" type="submit">Salvar</button><p class="hint">As configurações ficam salvas mesmo depois de desligar.</p></div>
+</fieldset>
+</form>
+<p id="notice" class="notice" data-kind="loading" role="status" aria-live="polite">Carregando configurações…</p>
+<button id="retry" class="retry" type="button" hidden>Tentar carregar novamente</button>
+<noscript>Ative o JavaScript do navegador para configurar as luzes.</noscript>
+</section>
+<aside aria-label="Configuração atual"><div class="status-panel"><div class="status-top"><span id="connection-dot" class="dot" aria-hidden="true"></span><span id="connection">Conectando ao dispositivo</span></div><p class="eyebrow">MENSAGEM CONFIGURADA</p><p id="current-message" class="current-message">—</p><div class="current-speed"><strong id="current-speed">—</strong> palavras / minuto</div></div><div class="connection-note"><strong>Conexão direta, sem internet.</strong>As luzes continuam piscando quando você desconecta. Para editar, volte à rede XmasMorseLed e abra 192.168.4.1.</div></aside>
+</div>
+</main>
+<footer><span>Feito para iluminar boas mensagens.</span><span class="morse-mark" aria-label="Morse">· · · &nbsp; — — — &nbsp; · · ·</span></footer>
+</div>
+<script>
+'use strict';
+const byId = id => document.getElementById(id);
+const fields = byId('fields'), message = byId('message'), wpm = byId('wpm'), range = byId('speed-range');
+let busy = false, loaded = false;
+function notice(text, kind) { byId('notice').textContent = text; byId('notice').dataset.kind = kind; }
+function connection(online) { byId('connection').textContent = online ? 'Conectado ao dispositivo' : 'Sem conexão com o dispositivo'; byId('connection-dot').dataset.state = online ? 'online' : 'offline'; }
+function fieldError(field, text = '') { const output = byId(field + '-error'); output.textContent = text; output.hidden = !text; byId(field).setAttribute('aria-invalid', String(Boolean(text))); }
+function counter() { byId('counter').textContent = `${message.value.length} / 120`; }
+function showCurrent(config) { byId('current-message').textContent = config.message; byId('current-speed').textContent = config.wpm; }
+function setBusy(value) { busy = value; fields.disabled = value || !loaded; byId('save').textContent = value && loaded ? 'Salvando…' : 'Salvar'; byId('retry').disabled = value; }
+async function request(options) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 6000);
+  try {
+    const response = await fetch('/api/config', {cache: 'no-store', ...options, signal: controller.signal});
+    const data = await response.json();
+    if (!response.ok) { const error = new Error(data.message || 'Não foi possível salvar. Tente novamente.'); error.field = data.field; error.server = true; throw error; }
+    if (typeof data.message !== 'string' || !Number.isInteger(data.wpm)) throw new Error('Invalid response');
+    connection(true);
+    return data;
+  } finally { clearTimeout(timeout); }
+}
+async function load() {
+  if (busy) return;
+  setBusy(true); byId('retry').hidden = true; notice('Carregando configurações…', 'loading');
+  try { const config = await request(); message.value = config.message; wpm.value = range.value = config.wpm; counter(); showCurrent(config); loaded = true; notice('Tudo pronto. Edite e salve para mudar as luzes.', 'success'); }
+  catch { connection(false); notice('Não foi possível conectar. Entre na rede XmasMorseLed e tente novamente.', 'error'); byId('retry').hidden = false; }
+  finally { setBusy(false); }
+}
+message.addEventListener('input', () => { counter(); fieldError('message'); });
+wpm.addEventListener('input', () => { fieldError('wpm'); const value = Number(wpm.value); if (wpm.value !== '' && Number.isInteger(value) && value >= 5 && value <= 40) range.value = value; });
+range.addEventListener('input', () => { wpm.value = range.value; fieldError('wpm'); });
+byId('retry').addEventListener('click', load);
+byId('config-form').addEventListener('submit', async event => {
+  event.preventDefault(); if (busy || !loaded) return;
+  fieldError('message'); fieldError('wpm');
+  let invalid = false;
+  if (!message.value.trim()) { fieldError('message', 'Digite uma mensagem.'); invalid = true; }
+  else if (message.value.length > 120) { fieldError('message', 'Use até 120 caracteres.'); invalid = true; }
+  else if (!/^[A-Za-z0-9 .,?!\-/():;=+@]+$/.test(message.value)) { fieldError('message', 'Use letras sem acento, números e a pontuação indicada.'); invalid = true; }
+  const speed = Number(wpm.value);
+  if (wpm.value === '' || !Number.isInteger(speed) || speed < 5 || speed > 40) { fieldError('wpm', 'Use um número inteiro entre 5 e 40.'); invalid = true; }
+  if (invalid) { notice('Confira os campos indicados antes de salvar.', 'error'); document.querySelector('[aria-invalid="true"]').focus(); return; }
+  setBusy(true); notice('Salvando configurações…', 'loading');
+  try {
+    const config = await request({method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: new URLSearchParams({message: message.value, wpm: String(speed)})});
+    message.value = config.message; wpm.value = range.value = config.wpm; counter(); showCurrent(config);
+    notice('Configuração salva. A mensagem recomeçou.', 'success');
+  } catch (error) {
+    if (error.server) { if (error.field === 'message' || error.field === 'wpm') fieldError(error.field, error.message); notice(error.message, 'error'); }
+    else { connection(false); notice('Sem conexão. Seus campos foram mantidos. Reconecte à rede e tente salvar novamente.', 'error'); }
+  } finally { setBusy(false); }
+});
+load();
+</script>
+</body>
+</html>

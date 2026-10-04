@@ -18,7 +18,7 @@ public:
 
 enum class SaveResult { Saved, Unchanged, Invalid, StorageError };
 
-// Single owner: setup(), then the HTTP/Arduino loop task.
+// Single owner: setup(), then the native HTTP server task.
 class Configuration {
 public:
   explicit Configuration(SettingsStorage& storage) : storage(storage) {}
