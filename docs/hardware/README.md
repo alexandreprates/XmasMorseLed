@@ -1,6 +1,6 @@
 # Version 2 hardware
 
-This is a **reference perfboard design, not a bench-validated circuit**. It replaces the ATtiny85 board. The selected board is the ESP32-C6 SuperMini shown in the user-supplied `esp32-c6-supermini.pdf` listing (AliExpress item 1005007937264166). Its pictures show GPIO0, USB-C, 5V, GND and 3V3. The listing also contains C3 instructions and an unrelated schematic: do not use that schematic to establish connectivity or regulator ratings.
+This is a **reference perfboard design, not a bench-validated circuit**. The selected board is the ESP32-C6 SuperMini shown in the user-supplied `esp32-c6-supermini.pdf` listing (AliExpress item 1005007937264166). Its pictures show GPIO0, USB-C, 5V, GND and 3V3. The listing also contains C3 instructions and an unrelated schematic: do not use that schematic to establish connectivity or regulator ratings.
 
 - [Editable circuit schematic](schematic.svg)
 - [Perfboard placement and wiring guide](perfboard.svg)
@@ -9,7 +9,7 @@ This is a **reference perfboard design, not a bench-validated circuit**. It repl
 
 Use one regulated **5 V, at least 1 A USB supply**, connected to the SuperMini USB-C socket. Verify that the header pad marked **5V** supplies USB VBUS before connecting the LED circuit. Do not connect a second supply to this pad while USB is attached. Leave battery pads unused. Do not connect 5 V to GPIO0 or 3V3.
 
-The board's regulator powers the ESP32. The LED branches use the USB 5 V rail and share GND with the board; they do not draw power from its 3V3 regulator. Remove the v1 external AMS1117 regulator. Keep wires short, and keep metal, wiring and the perfboard ground wiring away from the SuperMini antenna end.
+The board's regulator powers the ESP32. The LED branches use the USB 5 V rail and share GND with the board; they do not draw power from its 3V3 regulator. No external regulator is required. Keep wires short, and keep metal, wiring and the perfboard ground wiring away from the SuperMini antenna end.
 
 GPIO0 drives Q1 through R1. R2 keeps the base low and Q1 off while the controller is resetting. Q1 switches the tree's negative terminal to ground. The star has its own resistor and stays on whenever power is present. A GPIO HIGH turns the tree on.
 
@@ -34,7 +34,7 @@ GPIO0 drives Q1 through R1. R2 keeps the base low and Q1 off while the controlle
 
 Use BC337 from a documented manufacturer. The [onsemi BC337 datasheet](https://www.onsemi.com/pdf/datasheet/bc337-fsc-d.pdf) identifies 1=collector, 2=base, 3=emitter; follow its package drawing rather than assuming every TO-92 transistor has the same order. R1 supplies approximately `(3.3 - 0.8) / 470 = 5.3 mA` of base current for a load below 50 mA. Saturation and the GPIO output voltage must be checked on the actual circuit.
 
-With a 3.0 V tree drop at 5.0 V, R3 gives approximately `(5 - 3 - 0.2) / 56 = 32 mA` (assuming 0.2 V collector-emitter saturation), dissipating about 0.058 W. This is a nominal calculation, not a guaranteed load current: verify the actual string before continuous operation. Do not reuse the v1 10-ohm resistor with the new 5 V rail. R4 nominally gives 9 mA with a 3 V white LED. Confirm the star's actual rating; do not apply this circuit to an unidentified high-power LED.
+With a 3.0 V tree drop at 5.0 V, R3 gives approximately `(5 - 3 - 0.2) / 56 = 32 mA` (assuming 0.2 V collector-emitter saturation), dissipating about 0.058 W. This is a nominal calculation, not a guaranteed load current: verify the actual string before continuous operation. Use the specified 56-ohm series resistor with the 5 V rail. R4 nominally gives 9 mA with a 3 V white LED. Confirm the star's actual rating; do not apply this circuit to an unidentified high-power LED.
 
 ## Wiring table
 

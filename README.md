@@ -2,11 +2,11 @@
 
 Christmas lights that transmit your message in Morse code, configured from a phone over a local Wi-Fi network.
 
-Version 2 targets an **ESP32-C6 SuperMini**, with a **BC337 NPN transistor** switching the tree LEDs and a separate, continuously lit white star. Firmware and page assets are built together. No internet, router, account or filesystem upload is required.
+An **ESP32-C6 SuperMini** controls the lights, with a **BC337 NPN transistor** switching the tree LEDs and a separate, continuously lit white star. A Wi-Fi captive portal lets you customize the message and speed, with settings saved across power cycles. Firmware and page assets are built together. No internet, router, account or filesystem upload is required.
 
 ## Use
 
-1. Assemble and verify the [v2 circuit](docs/hardware/README.md), then [build and flash](docs/build.md) the firmware over USB.
+1. Assemble and verify the [circuit](docs/hardware/README.md), then [build and flash](docs/build.md) the firmware over USB.
 2. Power the SuperMini from a regulated 5 V USB supply.
 3. Connect your phone or computer to **`XmasMorseLed-XXXXXX`**. The suffix identifies the device; the network has **no password**. Stay connected if the phone reports that it has no internet.
 4. Open the captive-portal page offered by the device, or tap its **sign in to network** notification. If it does not appear, open **http://192.168.4.1** manually in a browser.
@@ -38,7 +38,7 @@ python3 -m venv .venv
 
 The project pins PlatformIO Core **6.2.0** and pioarduino **55.03.312-1** (Arduino-ESP32 3.3.12). The first build downloads the toolchain. The SuperMini uses the ESP32-C6 DevKitM 4 MB profile, GPIO0 and USB CDC; confirm board identity and Flash capacity on first connection.
 
-See [build, upload and recovery instructions](docs/build.md). v1 ATtiny85/ArduinoISP support remains in Git history and is not a v2 build target.
+See [build, upload and recovery instructions](docs/build.md).
 
 ## Test and preview
 
@@ -82,8 +82,8 @@ Screenshots are written to the ignored `test-results/` directory. See [validatio
 
 ## Hardware status and boundaries
 
-**The design still needs physical validation.** The vendor PDF contains inconsistent instructions and an unrelated schematic; the physical board's power connections and pinout must be confirmed. Follow the hardware guide before connecting the existing LED string.
+**The design still needs physical validation.** Confirm the SuperMini's power connections and pinout, then follow the [hardware checklist](docs/hardware/README.md#required-bench-acceptance-pending) before connecting the LED string.
 
-No OTA, Bluetooth, router connection, battery management, PCB manufacturing files or alternative light effects are included. The original PNG diagrams in `docs/` depict **v1 only**; use `docs/hardware/` for version 2.
+No OTA, Bluetooth, router connection, battery management, PCB manufacturing files or alternative light effects are included. The current [schematic](docs/hardware/schematic.svg) and [perfboard guide](docs/hardware/perfboard.svg) are in `docs/hardware/`.
 
 Licensed under [MIT](LICENSE).

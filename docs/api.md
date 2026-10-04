@@ -76,7 +76,7 @@ NVS namespace: `xmasmorse`; key: `settings`. One 132-byte blob holds the whole c
 | 8–127 | Canonical ASCII message, zero-padded |
 | 128–131 | Little-endian CRC-32 of bytes 0–127 |
 
-Loading checks size, magic, version, CRC and canonical content. Unknown formats and corruption use the defaults without silently rewriting Flash. Storage is written only after explicit changed-value saves. This is integrity checking, not encryption. No v1 storage migration is needed: the ATtiny firmware had a compile-time message.
+Loading checks size, magic, version, CRC and canonical content. Unknown formats and corruption use the defaults without silently rewriting Flash. Storage is written only after explicit changed-value saves. This is integrity checking, not encryption.
 
 ## Implementation choice
 

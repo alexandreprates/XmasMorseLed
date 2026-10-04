@@ -19,5 +19,3 @@ The environment uses the ESP32-C6 DevKitM 4 MB profile for the selected SuperMin
 ```
 
 Replace the example serial port with the actual port. Do not upload until the physical connections have been checked. For recovery, hold BOOT, press and release RESET, then release BOOT and retry upload. Use a USB data cable. Normal startup must not wait for a serial terminal; the finished firmware runs from a wall supply.
-
-The v2 environment replaces the ATtiny85/ArduinoISP environment. Firmware flashing is performed over the SuperMini USB connection, not an Arduino ISP programmer. v1 remains in Git history.
