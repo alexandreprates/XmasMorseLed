@@ -8,7 +8,7 @@
 <text x="355" y="120">USB_5V (verify header output)</text><text x="350" y="680">Common GND</text>
 <path d="M300 404H400M460 404H590V440H730" class="wire"/>
 <rect x="400" y="390" width="60" height="28" class="part"/><text x="393" y="368">R1 470 Ω</text><text x="310" y="435" class="small">MORSE</text><text x="602" y="426" class="small">BASE</text>
-<path d="M590 440V510M590 570V650" class="wire"/><rect x="577" y="510" width="26" height="60" class="part"/><text x="465" y="540">R2 100 kΩ</text><circle cx="590" cy="440" r="5" class="dot"/>
+<path d="M590 440V510M590 570V650" class="wire"/><rect x="577" y="510" width="26" height="60" class="part"/><text x="615" y="540">R2 100 kΩ</text><circle cx="590" cy="440" r="5" class="dot"/>
 <rect x="730" y="370" width="165" height="140" rx="6" class="part"/><text x="752" y="402">Q1 BC337</text><text x="740" y="446">B (2)</text><text x="842" y="390">C (1)</text><text x="842" y="497">E (3)</text><text x="740" y="470" class="small">NPN / TO-92</text>
 <path d="M865 510V650M865 370V330" class="wire"/>
 <path d="M865 130V166M865 222V252" class="wire power"/><rect x="852" y="166" width="26" height="56" class="part"/><text x="725" y="188">R3 56 Ω</text><text x="725" y="210" class="small">1/2 W</text>

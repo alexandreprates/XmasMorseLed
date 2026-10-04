@@ -1,196 +1,86 @@
-# XmasMorseLed - Morse Code Christmas Fairy Lights ✨
+# XmasMorseLed 2.0
 
-[![PlatformIO CI](https://img.shields.io/badge/PlatformIO-Ready-orange?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMjUwMCIgaGVpZ2h0PSIyNTAwIiB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCI%2BPGRlZnM%2BPGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iLTEuOTc4JSIgeDI9IjEwMC4wMDMlIiB5MT0iNzQuMzIyJSIgeTI9IjI1Ljc3OCUiPjxzdG9wIHN0b3AtY29sb3I9IiNGRkYiIHN0b3Atb3BhY2l0eT0iMCIgb2Zmc2V0PSIwJSIvPjxzdG9wIHN0b3AtY29sb3I9IiNGRkYiIHN0b3Atb3BhY2l0eT0iLjQiIG9mZnNldD0iNjMuNDEzJSIvPjxzdG9wIHN0b3AtY29sb3I9IiNGRkYiIHN0b3Atb3BhY2l0eT0iMCIgb2Zmc2V0PSIxMDAlIi8%2BPC9saW5lYXJHcmFkaWVudD48L2RlZnM%2BPHBhdGggZD0iTTEyOCAwQzU3LjMzIDAgMCA1Ny4zMjggMCAxMjhzNTcuMzI4IDEyOCAxMjggMTI4IDEyOC01Ny4zMzIgMTI4LTEyOFMxOTguNjcyIDAgMTI4IDB6IiBmaWxsPSIjRkY3RjAwIi8%2BPHBhdGggZD0iTTI0OSAxMjhBMTIxIDEyMSAwIDEgMS0yIDEwNGE2NCA2NCAwIDEgMCAwIDQ4IDEyMC44OSAxMjAuODkgMCAwIDEgMy0yNHoiIGZpbGw9InVybCgjYSkiLz48cGF0aCBkPSJNNjQgODh2ODBsMzItMTZ2LTY0eiIgZmlsbD0iIzIzMUYyMCIvPjxwYXRoIGQ9Ik05NiAxMDRWODhsMTYtOFYxNnptMTYtODBWOGgzMnYxNnoiIGZpbGw9IiMyMzFGMjAiLz48cGF0aCBkPSJNMTI4IDE2djY0aDE2Vjg4aC00OHoiIGZpbGw9IiMyMzFGMjAiLz48cGF0aCBkPSJNMTQ0IDE2djcyaDMyVjY0aDE2VjE2eiIgZmlsbD0iIzIzMUYyMCIvPjxwYXRoIGQ9Ik0xNDQgODhoMTZ2MjRIMTYwVjk2aDMydjE2aC00OHoiIGZpbGw9IiMyMzFGMjAiLz48cGF0aCBkPSJNMTkyIDY0djQ4aDE2VjY0eiIgZmlsbD0iIzIzMUYyMCIvPjxwYXRoIGQ9Ik0xOTIgMTEydjhIOTZWOTZoOTZ6IiBmaWxsPSIjMjMxRjIwIi8%2BPC9zdmc%2B)](https://platformio.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![ATtiny85](https://img.shields.io/badge/MCU-ATtiny85-blue.svg)](https://www.microchip.com/wwwproducts/en/ATtiny85)
+Christmas lights that transmit your message in Morse code, configured from a phone over a local Wi-Fi network.
 
-A festive Arduino project that transforms Christmas fairy lights into a Morse code transmitter using an ATtiny85 microcontroller. Perfect for adding a geeky twist to your holiday decorations! 🎄
+Version 2 targets an **ESP32-C6 SuperMini**, with a **BC337 NPN transistor** switching the tree LEDs and a separate, continuously lit white star. Firmware and page assets are built together. No internet, router, account or filesystem upload is required.
 
-## 🎯 Features
+## Use
 
-- **Morse Code Transmission**: Converts text messages into blinking LED patterns
-- **Customizable Messages**: Easily change the displayed message in the source code
-- **Adjustable Speed**: Configure WPM (Words Per Minute) for optimal readability
-- **Low Power**: Uses ATtiny85 for efficient battery operation
-- **Extensible**: Modular architecture for easy customization
+1. Assemble and verify the [v2 circuit](docs/hardware/README.md), then [build and flash](docs/build.md) the firmware over USB.
+2. Power the SuperMini from a regulated 5 V USB supply.
+3. Connect your phone or computer to **`XmasMorseLed-XXXXXX`**. The suffix identifies the device; the network has **no password**. Stay connected if the phone reports that it has no internet.
+4. Open **http://192.168.4.1** in a browser. There is no automatic captive portal.
+5. Enter a message, choose a speed and press **Salvar**. The saved values survive power loss. A successful save restarts the message after a short dark interval.
 
-## 📷 Demo
+The Wi-Fi network is deliberately open: anyone connected can change the message. The lights continue transmitting when no browser is connected.
 
-![Circuit Schematic](docs/schematics.png)
+## Message and timing
 
-## 🧰 Components List (BOM)
+- Default: `FELIZ NATAL!`, **25 words per minute**.
+- Input: **1–120 ASCII characters**, including letters, numbers, spaces and `. , ? ! - / ( ) : ; = + @`.
+- Lowercase is converted to uppercase. Leading/trailing spaces are removed and consecutive spaces are collapsed. Accents, emoji, tabs and unsupported punctuation are rejected rather than silently removed.
+- Speed: integer **5–40 WPM**; the Portuguese page labels this **PPM**.
+- Timing unit: integer `1200 / WPM` milliseconds. Dot: 1 unit; dash: 3; symbol gap: 1; letter gap: 3; word gap: 7; repeated-message gap: exactly 14.
+- Saving interrupts the current message and waits 7 units at the new speed before restarting. Saving unchanged values restarts playback but does not write Flash again.
+- Invalid or missing saved data uses the defaults. Failed saves retain the previous configuration.
 
-### Core Components
+A FreeRTOS task owns the nonblocking Morse engine. A separate native ESP-IDF HTTP server task validates and saves settings, then sends a value copy through a queue with one slot. Only the latest pending configuration is retained. Flash operations can briefly stall execution; actual pulse timing under Wi-Fi load must be checked on the board.
 
+## Build
 
-- **ATtiny85 DIP-8** (+ optional socket)
-- **AMS1117-3.3V** voltage regulator module (HW-764)
-- **N-Channel MOSFET** logic level (2N7000 or BS170)
-- **Red LED strip** (~3V, 50mA)
-
-### Passive Components
-
-
-- **Capacitor**: 100nF (between 3.3V and GND)
-- **Resistors**:
-  - 10kΩ (RESET pull-up)
-  - 220Ω (gate series resistor)
-  - 100kΩ (gate pull-down)
-  - 10Ω 1/4W (LED strip current limiting)
-
-### Connectivity
-
-
-- **USB cable/connector** (5V power supply)
-- **2-way terminal block** (LED strip connection)
-- **Breadboard or perfboard**
-- **Jumper wires** or solid core wire
-
-### Programming (Required for Upload)
-
-
-- **Arduino board** (as ISP programmer)
-- **Jumper wires** for ISP connections
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-1. **Install PlatformIO**
-   - CLI: `pip install platformio`
-   - VS Code: Install PlatformIO IDE extension
-
-2. **Set up Arduino as ISP**
-   - Connect Arduino to ATtiny85 (MISO/MOSI/SCK/RESET)
-   - Define `UPLOAD_PORT` with your ISP's serial port
-
-### Installation & Usage
-
-```bash
-# Clone the repository
-git clone <repository-url>
-cd XmasMorseLed
-
-# Configure your message and settings in src/main.cpp
-# MESSAGE: Text to transmit in Morse code
-# LED_PIN: Output pin (default: PB0)
-# WPM: Transmission speed (12-25 recommended for visual reading)
-
-# Build the project
-pio run
-
-# Upload to ATtiny85
-pio run -t upload
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements-dev.txt
+.venv/bin/pio run
 ```
 
-### Configuration
+The project pins PlatformIO Core **6.2.0** and pioarduino **55.03.312-1** (Arduino-ESP32 3.3.12). The first build downloads the toolchain. The SuperMini uses the ESP32-C6 DevKitM 4 MB profile, GPIO0 and USB CDC; confirm board identity and Flash capacity on first connection.
 
-Edit `src/main.cpp` to customize your project:
+See [build, upload and recovery instructions](docs/build.md). v1 ATtiny85/ArduinoISP support remains in Git history and is not a v2 build target.
 
-```cpp
-const uint8_t LED_PIN = 0;        // PB0 on ATtiny85
-const uint8_t WPM = 25;           // Words per minute
-const char* const MESSAGE = "FELIZ NATAL!";  // Your message
+## Test and preview
+
+Native tests need GCC with C++17 support. They cover the portable engine, configuration, persistence, API and the production HTTP adapter using transport fakes, with AddressSanitizer and UndefinedBehaviorSanitizer:
+
+```sh
+./scripts/test_native.sh
 ```
 
-## ⚙️ Technical Specifications
+Run the exact page against the real portable C++ configuration API on your computer:
 
-### Hardware Setup
-
-- **Microcontroller**: ATtiny85 @ 8MHz (internal clock)
-- **Output**: Pin PB0 drives MOSFET for LED strip switching
-- **Power**: 5V (USB) regulated to 3.3V, common GND with ISP programmer
-
-### Transmission Configuration
-
-
-- **Speed Control**: WPM controls timing (dot duration = 1200/WPM ms)
-- **Supported Characters**: Only characters in `include/MorseTable.h` are transmitted
-- **Word Spacing**: Consecutive spaces count as single inter-word intervals
-- **Continuous Loop**: Message repeats indefinitely with pause between cycles
-
-### Recommended Settings
-
-
-- **WPM Range**: 12-25 for comfortable visual reading
-- **Voltage**: 3.3V operation for reliability
-- **Current**: ~50mA LED strip consumption
-
-## 📁 Project Architecture
-
-```text
-├── src/
-│   ├── main.cpp                 # Main application and configuration
-│   ├── MorseTransmitter.cpp     # Morse code transmission logic
-│   └── MorseTable.cpp           # Morse code lookup table
-├── include/
-│   ├── MorseTransmitter.h       # Transmitter class interface
-│   └── MorseTable.h             # Morse table definitions
-├── docs/
-│   └── schematics.png           # Circuit schematic diagram
-└── platformio.ini               # PlatformIO configuration
+```sh
+.venv/bin/python scripts/preview.py
+# Open http://127.0.0.1:8080
 ```
 
-### Key Classes
+The preview has temporary in-memory storage. It does **not** simulate Wi-Fi, physical GPIO, ESP32 scheduling or NVS Flash. Restarting the preview resets its configuration.
 
-- **`MorseTransmitter`**: Handles character-to-pulse conversion and LED control
-- **`MorseTable`**: PROGMEM-stored Morse code lookup table with utility functions
-- **`main.cpp`**: Application entry point with user-configurable parameters
+With the preview running, exercise the browser flow and capture screenshots:
 
-## 🔧 Development
-
-### Building from Source
-
-```bash
-# Clean build
-pio run --target clean
-
-# Build only
-pio run
-
-# Build and upload
-pio run --target upload
+```sh
+.venv/bin/python -m playwright install chromium
+.venv/bin/python tests/browser/check_ui.py
 ```
 
-### ISP Configuration
+Screenshots are written to the ignored `test-results/` directory. See [validation results and remaining physical checks](docs/validation.md).
 
-The project uses `platformio.ini` configuration for ATtiny85:
-- Target: `attiny85` @ 8MHz
-- Upload Protocol: `stk500v1` @ 19200 bps via ArduinoISP
+## Project map
 
-## 📋 Troubleshooting
+| Component | Responsibility |
+| --- | --- |
+| `MorseTable`, `Settings`, `MorseTransmitter` | Portable encoding, validation and nonblocking pulse state machine |
+| `Configuration`, `PreferencesStorage` | Versioned single-record persistence and default/failure behavior |
+| `MorseRuntime` | GPIO owner task and latest-value queue |
+| `ConfigApi`, `ConfigurationServer` | Form API and bounded native ESP-IDF HTTP adapter |
+| `web/index.html`, `scripts/embed_web.py` | Self-contained Portuguese page, embedded at build time |
+| `docs/hardware/` | Editable SVG circuit, perfboard guide, BOM and connections |
 
-### Common Issues
+[API contract](docs/api.md) · [Hardware guide](docs/hardware/README.md) · [Build guide](docs/build.md)
 
-1. **Upload Fails**: Check ISP connections and `UPLOAD_PORT` setting
-2. **LED Not Blinking**: Verify MOSFET wiring and power supply
-3. **Wrong Speed**: Adjust `WPM` value in `main.cpp`
-4. **Characters Not Transmitted**: Ensure characters exist in `MorseTable.h`
+## Hardware status and boundaries
 
-### Debug Tips
+**The design still needs physical validation.** The vendor PDF contains inconsistent instructions and an unrelated schematic; the physical board's power connections and pinout must be confirmed. Follow the hardware guide before connecting the existing LED string.
 
+No OTA, Bluetooth, router connection, captive portal, battery management, PCB manufacturing files or alternative light effects are included. The original PNG diagrams in `docs/` depict **v1 only**; use `docs/hardware/` for version 2.
 
-- Use a multimeter to verify voltage levels
-- Check all connections match the schematic
-- Verify ATtiny85 fuse settings for internal 8MHz clock
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit pull requests or open issues for:
-
-- Bug fixes
-- Feature enhancements
-- Documentation improvements
-- Additional Morse code characters
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🎄 Happy Holidays
-
-Enjoy your blinking Morse code Christmas lights and spread some geeky holiday cheer! ✨
-
----
-
-Made with ❤️ for makers and electronics enthusiasts
+Licensed under [MIT](LICENSE).

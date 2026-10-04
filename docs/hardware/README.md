@@ -50,6 +50,12 @@ With a 3.0 V tree drop at 5.0 V, R3 gives approximately `(5 - 3 - 0.2) / 56 = 32
 
 The perfboard diagram is a **net-labeled placement guide**, not a copper-layer drawing or a board footprint. Every pad on isolated-pad perfboard is separate. Join the connections in this table with insulated wire; route crossings without electrical contact. Mount the SuperMini in sockets with USB-C accessible and its antenna beyond the carrier edge. Confirm the header pitch and spacing from the physical board before soldering sockets.
 
+## Why the external transistor remains
+
+The existing string is estimated at 50 mA. ESP32-C6 datasheet Table 5-4 gives **typical** GPIO source current of 40 mA at VOH >= 2.64 V, and sink current of 28 mA at VOL = 0.495 V, with the strongest driver setting. These are characterization points, not a guaranteed continuous-current budget for powering the entire string. The 3V3 power header is not software-switchable, and the seller's regulator capacity is unverified. Keep BC337 so the GPIO only supplies base current. An individual low-current indicator LED would be a different load.
+
+Source: [Espressif ESP32-C6 datasheet, Table 5-4](https://www.espressif.com/sites/default/files/documentation/esp32-c6_datasheet_en.pdf).
+
 ## Required bench acceptance (pending)
 
 1. With power disconnected, verify polarity, resistor values and no short between 5V and GND. Verify Q1 collector/base/emitter against its datasheet.
