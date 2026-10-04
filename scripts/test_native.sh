@@ -3,7 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 build_dir=$(mktemp -d)
 trap 'rm -rf "$build_dir"' EXIT
-sources=(src/MorseTable.cpp src/Settings.cpp src/MorseTransmitter.cpp)
+sources=(src/MorseTable.cpp src/Settings.cpp src/MorseTransmitter.cpp src/CaptiveDns.cpp)
 for optional in src/Configuration.cpp src/ConfigApi.cpp; do
   if [[ -f "$optional" ]]; then sources+=("$optional"); fi
 done

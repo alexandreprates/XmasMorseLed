@@ -8,7 +8,9 @@ using httpd_handle_t = void*;
 enum httpd_method_t { HTTP_GET, HTTP_POST };
 struct httpd_req_t { size_t content_len; void* user_ctx; void* test_state; };
 struct httpd_uri_t { const char* uri; httpd_method_t method; esp_err_t (*handler)(httpd_req_t*); void* user_ctx; };
-struct httpd_config_t { int task_priority; int stack_size; int max_open_sockets; bool lru_purge_enable; int recv_wait_timeout; int send_wait_timeout; };
+using httpd_uri_match_func_t = bool (*)(const char*, const char*, size_t);
+struct httpd_config_t { int task_priority; int stack_size; int max_open_sockets; bool lru_purge_enable; int recv_wait_timeout; int send_wait_timeout; httpd_uri_match_func_t uri_match_fn; };
+bool httpd_uri_match_wildcard(const char*, const char*, size_t);
 #define HTTPD_DEFAULT_CONFIG() httpd_config_t{}
 esp_err_t httpd_start(httpd_handle_t*, const httpd_config_t*);
 esp_err_t httpd_stop(httpd_handle_t);

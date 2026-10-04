@@ -9,10 +9,12 @@ Version 2 targets an **ESP32-C6 SuperMini**, with a **BC337 NPN transistor** swi
 1. Assemble and verify the [v2 circuit](docs/hardware/README.md), then [build and flash](docs/build.md) the firmware over USB.
 2. Power the SuperMini from a regulated 5 V USB supply.
 3. Connect your phone or computer to **`XmasMorseLed-XXXXXX`**. The suffix identifies the device; the network has **no password**. Stay connected if the phone reports that it has no internet.
-4. Open **http://192.168.4.1** in a browser. There is no automatic captive portal.
+4. Open the captive-portal page offered by the device, or tap its **sign in to network** notification. If it does not appear, open **http://192.168.4.1** manually in a browser.
 5. Enter a message, choose a speed and press **Salvar**. The saved values survive power loss. A successful save restarts the message after a short dark interval.
 
 The Wi-Fi network is deliberately open: anyone connected can change the message. The lights continue transmitting when no browser is connected.
+
+Portal opening depends on the phone/computer's operating system and network settings; it is not guaranteed on every connection. The network stays local and has no internet access. HTTPS sites are not redirected. If the portal window closes, the direct HTTP URL remains available while connected to the network.
 
 ## Message and timing
 
@@ -40,7 +42,7 @@ See [build, upload and recovery instructions](docs/build.md). v1 ATtiny85/Arduin
 
 ## Test and preview
 
-Native tests need GCC with C++17 support. Six suites cover the portable engine, configuration, persistence, API and the production HTTP, Preferences and Morse runtime adapters using host fakes, with AddressSanitizer and UndefinedBehaviorSanitizer:
+Native tests need GCC with C++17 support. Seven suites cover the portable engine, configuration, persistence, API, DNS packets and the production HTTP, Preferences and Morse runtime adapters using host fakes, with AddressSanitizer and UndefinedBehaviorSanitizer:
 
 ```sh
 ./scripts/test_native.sh
@@ -53,7 +55,7 @@ Run the exact page against the real portable C++ configuration API on your compu
 # Open http://127.0.0.1:8080
 ```
 
-The preview has temporary in-memory storage. It does **not** simulate Wi-Fi, physical GPIO, ESP32 scheduling or NVS Flash. Restarting the preview resets its configuration.
+The preview has temporary in-memory storage. It does **not** simulate Wi-Fi, captive-portal discovery, physical GPIO, ESP32 scheduling or NVS Flash. Restarting the preview resets its configuration.
 
 With the preview running, exercise the browser flow and capture screenshots:
 
@@ -71,7 +73,8 @@ Screenshots are written to the ignored `test-results/` directory. See [validatio
 | `MorseTable`, `Settings`, `MorseTransmitter` | Portable encoding, validation and nonblocking pulse state machine |
 | `Configuration`, `PreferencesStorage` | Versioned single-record persistence and default/failure behavior |
 | `MorseRuntime` | GPIO owner task and latest-value queue |
-| `ConfigApi`, `ConfigurationServer` | Form API and bounded native ESP-IDF HTTP adapter |
+| `ConfigApi`, `ConfigurationServer` | Form API, bounded native ESP-IDF HTTP adapter and captive-portal DNS/redirects |
+| `CaptiveDns` | Bounded portable DNS query parser and captive-portal replies |
 | `web/index.html`, `scripts/embed_web.py` | Self-contained Portuguese page, embedded at build time |
 | `docs/hardware/` | Editable SVG circuit, perfboard guide, BOM and connections |
 
@@ -81,6 +84,6 @@ Screenshots are written to the ignored `test-results/` directory. See [validatio
 
 **The design still needs physical validation.** The vendor PDF contains inconsistent instructions and an unrelated schematic; the physical board's power connections and pinout must be confirmed. Follow the hardware guide before connecting the existing LED string.
 
-No OTA, Bluetooth, router connection, captive portal, battery management, PCB manufacturing files or alternative light effects are included. The original PNG diagrams in `docs/` depict **v1 only**; use `docs/hardware/` for version 2.
+No OTA, Bluetooth, router connection, battery management, PCB manufacturing files or alternative light effects are included. The original PNG diagrams in `docs/` depict **v1 only**; use `docs/hardware/` for version 2.
 
 Licensed under [MIT](LICENSE).

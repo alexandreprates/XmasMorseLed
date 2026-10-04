@@ -3,6 +3,7 @@
 
 #include "ConfigApi.h"
 #include "MorseRuntime.h"
+#include <AsyncUDP.h>
 #include <esp_http_server.h>
 
 class ConfigurationServer {
@@ -11,6 +12,8 @@ public:
       : configuration(configuration), morse(morse) {}
   bool begin();
 private:
+  bool failStartup();
+  static esp_err_t redirectToPortal(httpd_req_t* request);
   static esp_err_t page(httpd_req_t* request);
   static esp_err_t getConfig(httpd_req_t* request);
   static esp_err_t postConfig(httpd_req_t* request);
@@ -19,6 +22,7 @@ private:
   Configuration& configuration;
   MorseRuntime& morse;
   httpd_handle_t server = nullptr;
+  AsyncUDP dns;
 };
 
 #endif
