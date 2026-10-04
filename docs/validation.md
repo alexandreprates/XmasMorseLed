@@ -5,16 +5,19 @@ Validation date: 2026-10-04. These results describe software checks on the devel
 ## Passed
 
 - ESP32-C6 firmware build with PlatformIO 6.2.0, pioarduino 55.03.312-1, Arduino-ESP32 3.3.12 and the bundled ESP-IDF 5.5.5 libraries.
-- Four native C++ suites under AddressSanitizer and UndefinedBehaviorSanitizer: Morse engine/table, configuration/persistence, form API and production HTTP adapter with recording transport fakes.
+- Six native C++ suites under AddressSanitizer and UndefinedBehaviorSanitizer: Morse engine/table, configuration/persistence, form API, production HTTP adapter, production Preferences adapter and production Morse runtime.
 - All 49 non-space table entries decoded against explicit expected patterns; space handling, 1/3/7-unit gaps, 14-unit repetition gap, restart, scheduler delays, rollover and invalid-configuration shutdown.
 - Input limits and normalization, maximum-length persistence round trip, corruption of each record byte, unchanged-value write avoidance, failed writes and simulated reboot restore.
+- Binary record compatibility against a golden fixture with an independently calculated CRC; rejection of correctly checksummed records with noncanonical messages, unsupported characters, embedded NUL and invalid speeds without modifying the output settings.
+- Production Preferences adapter with a recording fake: namespace open failures, missing/wrong-size records, short reads/writes, handle closure, exact serialized writes, unchanged-save avoidance, restore and corrupt-record fallback.
+- Production Morse runtime with a deterministic clock, GPIO recorder and one-slot queue fake: queue/task creation failures and retry, failed-task resource cleanup, duplicate initialization, copied settings, latest-update wins, interruption of an active pulse, restart at the new speed and rejected updates preserving playback.
 - Production HTTP adapter tests: first request rejected with a body, oversized and multipart requests rejected without body reads, partial reads, interrupted bodies, sequential invalid/valid requests and save-failure behavior.
 - Chromium browser integration against the real portable C++ API: save/reload, normalization, speed-control synchronization, client/server validation, duplicate-submit protection, storage-error display, lost-connection preservation and initial-load retry.
 - Responsive screenshot and overflow checks at 1440×900, 1024×768, 390×844 and 320×740. Page makes no external network requests.
 - Editable SVG circuit and perfboard drawings parsed and rendered for visual inspection.
 - Independent clean-context reviews for the platform/hardware, Morse core, persistence/runtime and web adapter. Findings were corrected before completion.
 
-The native preview uses in-memory storage. The HTTP transport tests use ESP-IDF API fakes around the production adapter; they do not execute lwIP or radio firmware. The browser uses the full Chromium channel because headless-shell screenshots were unreliable in this environment.
+The native preview uses in-memory storage. The HTTP transport tests use ESP-IDF API fakes around the production adapter; they do not execute lwIP or radio firmware. Runtime tests execute the real worker using a simulated one-millisecond tick and terminate it through the fake scheduler; they do not exercise FreeRTOS concurrency or actual tick timing. Preferences tests exercise the adapter's return-value handling, not physical flash atomicity. The browser uses the full Chromium channel because headless-shell screenshots were unreliable in this environment.
 
 Build report after HTTP integration: app Flash **1,042,650 / 1,310,720 bytes** and static RAM **42,620 / 327,680 bytes**. This is the app partition budget, not the entire 4 MB chip. Runtime heap, Wi-Fi allocations and task stacks need on-device observation.
 
@@ -29,6 +32,8 @@ Build report after HTTP integration: app Flash **1,042,650 / 1,310,720 bytes** a
 ```
 
 Browser screenshots are generated under `test-results/`: `ui-desktop.png`, `ui-tablet.png`, `ui-mobile.png`, `ui-narrow.png`, `ui-offline.png`, `hardware-schematic.png`, and `hardware-perfboard.png`.
+
+The native runner requires Bash and a C++17 compiler with AddressSanitizer and UndefinedBehaviorSanitizer (GCC on Linux was used). It builds each `tests/native/test_*.cpp` into a temporary directory, stops on any compile/assertion/sanitizer failure and removes its binaries afterward. Set `CXX` to select another compatible compiler. Hardware fakes live under `tests/fakes/` and are only included by the host runner.
 
 ## Pending physical acceptance
 

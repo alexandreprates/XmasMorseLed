@@ -10,7 +10,11 @@ done
 for test_file in tests/native/test_*.cpp; do
   test_name=$(basename "$test_file" .cpp)
   extra=()
-  if [[ "$test_name" == test_http_transport ]]; then extra=(-Itests/fakes src/ConfigurationServer.cpp); fi
+  case "$test_name" in
+    test_http_transport) extra=(-Itests/fakes src/ConfigurationServer.cpp) ;;
+    test_runtime) extra=(-Itests/fakes -DMORSE_OUTPUT_PIN=0 src/MorseRuntime.cpp) ;;
+    test_preferences_storage) extra=(-Itests/fakes) ;;
+  esac
   "${CXX:-g++}" -std=c++17 -Wall -Wextra -Werror -pedantic -g \
     -fsanitize=address,undefined -fno-omit-frame-pointer -no-pie \
     -Iinclude "${extra[@]}" "${sources[@]}" "$test_file" -o "$build_dir/$test_name"

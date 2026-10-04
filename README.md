@@ -40,7 +40,7 @@ See [build, upload and recovery instructions](docs/build.md). v1 ATtiny85/Arduin
 
 ## Test and preview
 
-Native tests need GCC with C++17 support. They cover the portable engine, configuration, persistence, API and the production HTTP adapter using transport fakes, with AddressSanitizer and UndefinedBehaviorSanitizer:
+Native tests need GCC with C++17 support. Six suites cover the portable engine, configuration, persistence, API and the production HTTP, Preferences and Morse runtime adapters using host fakes, with AddressSanitizer and UndefinedBehaviorSanitizer:
 
 ```sh
 ./scripts/test_native.sh

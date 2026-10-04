@@ -4,6 +4,44 @@
 #include <iostream>
 #include <string>
 
+// CRC values independently generated using Python zlib.crc32 over the 128-byte
+// XML2 header/payload. Do not derive expected fixtures with encodeSettings().
+SettingsRecord fixture(std::string_view message, uint8_t wpm, uint32_t crc) {
+  SettingsRecord record{'X', 'M', 'L', '2', 1, wpm,
+                        static_cast<uint8_t>(message.size()), 0};
+  std::memcpy(record.data() + 8, message.data(), message.size());
+  for (size_t i = 0; i < 4; ++i) record[128 + i] = static_cast<uint8_t>(crc >> (8 * i));
+  return record;
+}
+
+void testRecordCompatibilityAndSemanticValidation() {
+  const auto golden = fixture("SOS", 25, 0x8E8BE4BD);
+  Settings expected;
+  assert(normalizeSettings("SOS", 25, expected) == SettingsError::None);
+  assert(encodeSettings(expected) == golden);
+  Settings decoded;
+  assert(decodeSettings(golden, decoded) && sameSettings(expected, decoded));
+  const SettingsRecord invalidRecords[]{
+      fixture("e", 25, 0x25E67786),
+      fixture(" E", 25, 0x6F661753),
+      fixture("E ", 25, 0xEA77C676),
+      fixture("E  E", 25, 0xA378EF70),
+      fixture("#", 25, 0x023A0B31),
+      fixture(std::string_view("\0", 1), 25, 0xFC6CB64A),
+      fixture("E", 0, 0x14B2465C),
+      fixture("E", 41, 0x934393BF),
+  };
+  for (const auto& invalid : invalidRecords) {
+    assert(!decodeSettings(invalid, decoded));
+    assert(sameSettings(decoded, expected));
+  }
+  Settings invalid = expected;
+  invalid.wpm = 0;
+  assert(encodeSettings(invalid) == SettingsRecord{});
+  invalid = expected; invalid.message[0] = 's';
+  assert(encodeSettings(invalid) == SettingsRecord{});
+}
+
 struct MemoryStorage : SettingsStorage {
   SettingsRecord saved{};
   bool exists = false;
@@ -17,6 +55,7 @@ struct MemoryStorage : SettingsStorage {
   }
 };
 int main() {
+  testRecordCompatibilityAndSemanticValidation();
   MemoryStorage storage;
   Configuration configuration(storage);
   assert(!configuration.begin());
@@ -54,5 +93,5 @@ int main() {
   assert(!configuration.begin() && sameSettings(configuration.current(), Settings{}));
   storage.exists = false;
   assert(!configuration.begin());
-  std::cout << "PASS persistence, reboot, unchanged writes, failed commit, invalid record and 120-character round trip\n";
+  std::cout << "PASS persistence, reboot, unchanged writes, failed commit, golden record, semantic validation and 120-character round trip\n";
 }
