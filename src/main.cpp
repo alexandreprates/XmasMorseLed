@@ -1,16 +1,21 @@
 #include <Arduino.h>
 #include "MorseTransmitter.h"
 
-const uint8_t LED_PIN = 0;        // PB0 on ATtiny85
-const uint8_t WPM = 25;           // Words per minute (international standard)
-const char* const MESSAGE = "FELIZ NATAL!";
-
+namespace {
 MorseTransmitter transmitter;
+void writeOutput(bool high, void*) {
+  digitalWrite(MORSE_OUTPUT_PIN, high ? HIGH : LOW);
+}
+}
 
 void setup() {
-  transmitter.begin(WPM, LED_PIN);
+  digitalWrite(MORSE_OUTPUT_PIN, LOW);
+  pinMode(MORSE_OUTPUT_PIN, OUTPUT);
+  transmitter.begin(writeOutput);
+  transmitter.configure(Settings{}, millis());
 }
 
 void loop() {
-  transmitter.transmitMessage(MESSAGE);
+  transmitter.update(millis());
+  delay(1);
 }

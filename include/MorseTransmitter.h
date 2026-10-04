@@ -1,37 +1,29 @@
-/**
- * @file MorseTransmitter.h
- * @brief Simple Morse code LED transmitter
- */
-
 #ifndef MORSE_TRANSMITTER_H
 #define MORSE_TRANSMITTER_H
 
-#include <Arduino.h>
-#include "MorseTable.h"
+#include "Settings.h"
 
 class MorseTransmitter {
 public:
-  MorseTransmitter();
-
-  void begin(uint8_t wpm, uint8_t ledPin);
-  void transmitMessage(const char* message) const;
-  bool isReady() const;
+  using Output = void (*)(bool high, void* context);
+  void begin(Output output, void* context = nullptr);
+  bool configure(const Settings& settings, uint32_t nowMs);
+  void update(uint32_t nowMs);
+  bool isReady() const { return active; }
 
 private:
-  uint8_t pin;
-  uint16_t dotDuration;
-  uint16_t dashDuration;
-  uint16_t symbolSpace;
-  uint16_t letterSpace;
-  uint16_t wordSpace;
-  bool initialized;
-
-  void transmitDot() const;
-  void transmitDash() const;
-  void transmitLetterSpace() const;
-  void transmitWordSpace() const;
-  void transmitPattern(const MorseTable::MorsePattern& pattern) const;
-  void sendChar(char c) const;
+  void setOutput(bool high);
+  void startPulse(uint32_t nowMs);
+  Output output = nullptr;
+  void* context = nullptr;
+  Settings settings{};
+  size_t character = 0;
+  uint8_t symbol = 0;
+  uint32_t startedAt = 0;
+  uint32_t duration = 0;
+  uint16_t unit = 0;
+  bool active = false;
+  bool high = false;
 };
 
-#endif // MORSE_TRANSMITTER_H
+#endif
