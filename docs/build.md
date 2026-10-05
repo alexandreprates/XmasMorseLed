@@ -19,3 +19,23 @@ The environment uses the ESP32-C6 DevKitM 4 MB profile for the selected SuperMin
 ```
 
 Replace the example serial port with the actual port. Do not upload until the physical connections have been checked. For recovery, hold BOOT, press and release RESET, then release BOOT and retry upload. Use a USB data cable. Normal startup must not wait for a serial terminal; the finished firmware runs from a wall supply.
+
+## Preview the control page
+
+After installing the development requirements above, run the exact page against the portable C++ configuration API on your computer. The preview also requires a C++17 compiler such as GCC.
+
+```sh
+.venv/bin/python scripts/preview.py
+# Open http://127.0.0.1:8080
+```
+
+The preview uses temporary in-memory storage; restarting it resets the configuration. It does not simulate Wi-Fi, captive-portal discovery, physical GPIO, ESP32 scheduling or NVS Flash.
+
+For browser checks, install Chromium once, leave the preview running and run the checks in another terminal:
+
+```sh
+.venv/bin/python -m playwright install chromium
+.venv/bin/python tests/browser/check_ui.py
+```
+
+Screenshots are saved under the ignored `test-results/` directory. See [validation](validation.md) for native tests, recorded results and pending on-device checks.

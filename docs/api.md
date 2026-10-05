@@ -32,6 +32,12 @@ POST requires `Content-Type: application/x-www-form-urlencoded` (an optional cha
 
 On success, POST returns the same configuration shape as GET. It commits before updating memory or queuing playback; a queue of length one keeps the latest successful update. Repeating a save with identical values still restarts playback but skips storage writes. The response confirms that playback was queued, not that a physical pulse has already been measured.
 
+## Morse timing
+
+The default message is `FELIZ NATAL!` at 25 words per minute. The allowed range is 5–40 WPM; the Portuguese page labels this PPM. One timing unit is integer `1200 / WPM` milliseconds. Dots last one unit, dashes three; gaps are one unit between symbols, three between letters and seven between words. A completed message repeats after a 14-unit gap.
+
+A successful save interrupts the current message and waits seven units at the new speed before restarting. Saving unchanged values also restarts playback without writing Flash again. The dedicated Morse task continues transmitting without a connected browser; actual pulse timing under Wi-Fi load must be checked on the device.
+
 ## Errors
 
 Application errors use JSON, for example:

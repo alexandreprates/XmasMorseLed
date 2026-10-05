@@ -1,89 +1,60 @@
-# XmasMorseLed 2.0
+# 🎄 XmasMorseLed 2.0
 
-Christmas lights that transmit your message in Morse code, configured from a phone over a local Wi-Fi network.
+**A little Christmas tree with something to say.**
 
-An **ESP32-C6 SuperMini** controls the lights, with a **BC337 NPN transistor** switching the tree LEDs and a separate, continuously lit white star. A Wi-Fi captive portal lets you customize the message and speed, with settings saved across power cycles. Firmware and page assets are built together. No internet, router, account or filesystem upload is required.
+Give your Christmas lights a message of their own. XmasMorseLed turns a greeting into short and long blinks in Morse code, while the star keeps shining above it all. Pick the words and the pace from your phone, then let the tree do the talking.
 
-## Use
+<p align="center">
+  <img src="docs/tree.jpg" alt="A Christmas tree decorated with colorful lights, red ornaments and a pixel-art star" width="440">
+</p>
 
-1. Assemble and verify the [circuit](docs/hardware/README.md), then [build and flash](docs/build.md) the firmware over USB.
-2. Power the SuperMini from a regulated 5 V USB supply.
-3. Connect your phone or computer to **`XmasMorseLed-XXXXXX`**. The suffix identifies the device; the network has **no password**. Stay connected if the phone reports that it has no internet.
-4. Open the captive-portal page offered by the device, or tap its **sign in to network** notification. If it does not appear, open **http://192.168.4.1** manually in a browser.
-5. Enter a message, choose a speed and press **Salvar**. The saved values survive power loss. A successful save restarts the message after a short dark interval.
+<p align="center"><em>A few lights, a bright star, and a Christmas wish hidden in the blinking.</em></p>
 
-The Wi-Fi network is deliberately open: anyone connected can change the message. The lights continue transmitting when no browser is connected.
+## ✨ A greeting in every blink
 
-Portal opening depends on the phone/computer's operating system and network settings; it is not guaranteed on every connection. The network stays local and has no internet access. HTTPS sites are not redirected. If the portal window closes, the direct HTTP URL remains available while connected to the network.
+The tree starts with **FELIZ NATAL!** — Portuguese for **Merry Christmas!** You can keep that greeting, send someone a little message, or invite the family to guess what the lights are saying.
 
-## Message and timing
+- **Make it personal.** Change the message from a page on your phone.
+- **Set the pace.** Choose how quickly the lights tell their story.
+- **Come back to your greeting.** Your message and speed are remembered after the power is unplugged.
+- **Keep it local.** The tree creates its own Wi-Fi network. No internet, account or app installation is needed.
 
-- Default: `FELIZ NATAL!`, **25 words per minute**.
-- Input: **1–120 ASCII characters**, including letters, numbers, spaces and `. , ? ! - / ( ) : ; = + @`.
-- Lowercase is converted to uppercase. Leading/trailing spaces are removed and consecutive spaces are collapsed. Accents, emoji, tabs and unsupported punctuation are rejected rather than silently removed.
-- Speed: integer **5–40 WPM**; the Portuguese page labels this **PPM**.
-- Timing unit: integer `1200 / WPM` milliseconds. Dot: 1 unit; dash: 3; symbol gap: 1; letter gap: 3; word gap: 7; repeated-message gap: exactly 14.
-- Saving interrupts the current message and waits 7 units at the new speed before restarting. Saving unchanged values restarts playback but does not write Flash again.
-- Invalid or missing saved data uses the defaults. Failed saves retain the previous configuration.
+In Morse code, a short blink is a dot and a longer blink is a dash. The pauses separate the letters and words. Once the greeting is finished, the tree starts again — even after you put your phone away.
 
-A FreeRTOS task owns the nonblocking Morse engine. A separate native ESP-IDF HTTP server task validates and saves settings, then sends a value copy through a queue with one slot. Only the latest pending configuration is retained. Flash operations can briefly stall execution; actual pulse timing under Wi-Fi load must be checked on the board.
+## 🎁 Give the tree a message
 
-## Build
+Once your tree is assembled and programmed:
 
-```sh
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements-dev.txt
-.venv/bin/pio run
-```
+1. **Plug it in** using its USB power supply.
+2. **Join its Wi-Fi**, named `XmasMorseLed-XXXXXX`. There is no password. If your phone says the network has no internet, choose to stay connected.
+3. **Open the little control page.** It may appear automatically or through a “sign in to network” notification. You can always open **http://192.168.4.1** while connected.
+4. **Write a greeting, choose the speed, and tap “Salvar”** (Save). After a short pause, the lights begin your new message.
 
-The project pins PlatformIO Core **6.2.0** and pioarduino **55.03.312-1** (Arduino-ESP32 3.3.12). The first build downloads the toolchain. The SuperMini uses the ESP32-C6 DevKitM 4 MB profile, GPIO0 and USB CDC; confirm board identity and Flash capacity on first connection.
+Try `FELIZ NATAL!`, `HO HO HO!` or `BOAS FESTAS!`. Messages can be up to **120 characters**; use letters without accents, numbers, spaces and the punctuation shown on the page. The controls are in Portuguese.
 
-See [build, upload and recovery instructions](docs/build.md).
+Anyone connected to the tree's open Wi-Fi can change the greeting. Automatic page opening depends on your phone, so keep the direct address handy.
 
-## Test and preview
+## 🛠️ A small project for your Christmas corner
 
-Native tests need GCC with C++17 support. Seven suites cover the portable engine, configuration, persistence, API, DNS packets and the production HTTP, Preferences and Morse runtime adapters using host fakes, with AddressSanitizer and UndefinedBehaviorSanitizer:
+An **ESP32-C6 SuperMini** runs the show, and a **BC337 transistor** switches the tree lights. The star has its own light and stays on. Everything is powered from USB.
 
-```sh
-./scripts/test_native.sh
-```
+| The little controller | The Christmas sparkle |
+| :---: | :---: |
+| <img src="docs/esp32-c6-mini.jpg" alt="Close-up of the ESP32-C6 SuperMini board and its USB-C connector" width="180"> | <img src="docs/fairy_lights.png" alt="A coiled string of colorful fairy lights" width="280"> |
+| ESP32-C6 SuperMini | Fairy lights for the tree |
 
-Run the exact page against the real portable C++ configuration API on your computer:
+Want to make one? Start with the [parts and assembly guide](docs/hardware/README.md), then follow the [firmware setup and USB upload guide](docs/build.md). The [circuit diagram](docs/hardware/schematic.svg) and [perfboard layout](docs/hardware/perfboard.svg) show how the pieces connect.
 
-```sh
-.venv/bin/python scripts/preview.py
-# Open http://127.0.0.1:8080
-```
+**Still on the workbench:** the current circuit design needs physical validation. Check the board connections and follow the [hardware checklist](docs/hardware/README.md#required-bench-acceptance-pending) before powering the assembled lights.
 
-The preview has temporary in-memory storage. It does **not** simulate Wi-Fi, captive-portal discovery, physical GPIO, ESP32 scheduling or NVS Flash. Restarting the preview resets its configuration.
+## 📚 For curious tinkerers
 
-With the preview running, exercise the browser flow and capture screenshots:
+The technical details have their own place, ready when you need them:
 
-```sh
-.venv/bin/python -m playwright install chromium
-.venv/bin/python tests/browser/check_ui.py
-```
+- [Build, upload and preview the control page](docs/build.md)
+- [Run the tests and see what still needs checking](docs/validation.md)
+- [Explore the message API and Morse timing](docs/api.md)
 
-Screenshots are written to the ignored `test-results/` directory. See [validation results and remaining physical checks](docs/validation.md).
+Made for a little tinkering and a little Christmas cheer. 🎄
 
-## Project map
-
-| Component | Responsibility |
-| --- | --- |
-| `MorseTable`, `Settings`, `MorseTransmitter` | Portable encoding, validation and nonblocking pulse state machine |
-| `Configuration`, `PreferencesStorage` | Versioned single-record persistence and default/failure behavior |
-| `MorseRuntime` | GPIO owner task and latest-value queue |
-| `ConfigApi`, `ConfigurationServer` | Form API, bounded native ESP-IDF HTTP adapter and captive-portal DNS/redirects |
-| `CaptiveDns` | Bounded portable DNS query parser and captive-portal replies |
-| `web/index.html`, `scripts/embed_web.py` | Self-contained Portuguese page, embedded at build time |
-| `docs/hardware/` | Editable SVG circuit, perfboard guide, BOM and connections |
-
-[API contract](docs/api.md) · [Hardware guide](docs/hardware/README.md) · [Build guide](docs/build.md)
-
-## Hardware status and boundaries
-
-**The design still needs physical validation.** Confirm the SuperMini's power connections and pinout, then follow the [hardware checklist](docs/hardware/README.md#required-bench-acceptance-pending) before connecting the LED string.
-
-No OTA, Bluetooth, router connection, battery management, PCB manufacturing files or alternative light effects are included. The current [schematic](docs/hardware/schematic.svg) and [perfboard guide](docs/hardware/perfboard.svg) are in `docs/hardware/`.
-
-Licensed under [MIT](LICENSE).
+Released under the [MIT License](LICENSE).
